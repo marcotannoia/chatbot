@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marco Tannoia – AI Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="theme-color" content="#020617" />
+<meta name="color-scheme" content="dark light" />
+  <link rel="stylesheet" href="chatbot.css" />
+  <script defer src="chatbot.js"></script>
+</head>
+
+<body>
+  <div class="bg-gradient"></div>
+
+  <!-- TOP NAV -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <span class="nav-dot"></span>
+      <span class="nav-title">Marco’s AI Chatbot</span>
+    </div>
+    <div class="nav-right">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="toggle-icon"></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- ========================= -->
+    <!-- HERO SECTION (LOGIN PAGE) -->
+    <!-- ========================= -->
+    <section id="hero" class="hero-section reveal">
+      <div class="hero-content parallax-layer">
+        <h1 class="hero-title">Marco’s Serverless AI Chatbot</h1>
+        <p class="hero-subtitle">
+          Elegant. Minimal. Fully Serverless.
+        </p>
+
+        <p class="hero-description">
+          Log in with your account and start chatting.
+        </p>
+
+        <button id="loginBtn" class="btn btn-primary hero-btn">
+          LOGIN
+        </button>
+
+        <p class="hero-hint">Login to start using the bot</p>
+      </div>
+
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-dot"></div>
+      </div>
+    </section>
+
+<div class="main-info-wrapper">
+
+    <!-- ========================= -->
+    <!-- SECTION 2 — ABOUT ME -->
+    <!-- ========================= -->
+
+       <section id="section-about-me" class="info-section reveal">
+      <h2 class="info-title">WHO AM I?</h2>
+      <p class="info-text">
+        I'm Marco Tannoia, an Italian Computer & Automation Engineering student.
+        I like building real projects, experimenting with AI, cloud technologies
+        and automation, and seeing how modern platforms fit together.
+        I have been studying and working with cloud technologies recently and i got really
+        interested. This is my first serverless project.
+        Enjoy it!
+      </p>
+    </section>
+
+        <!-- ========================= -->
+    <!-- SECTION 1 — WHAT IS THIS -->
+    <!-- ========================= -->
+
+
+    <section id="section-what" class="info-section reveal">
+      <h2 class="info-title">WHAT IS THIS PROJECT?</h2>
+      <p class="info-text">
+        This chatbot is my first serverless project. I created it to learn,
+        experiment and understand how a fully scalable cloud application works. How does it work?
+      </p>
+      <p class="info-text">
+        Simply type a message and the bot will respond using AI-generated text.
+      </p>
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- SECTION 2 — ABOUT ME -->
+    <!-- ========================= -->
+
+
+    <!-- ========================= -->
+    <!-- SECTION 3 — HOW IT WAS BUILT -->
+    <!-- ========================= -->
+    <section id="section-how" class="info-section reveal">
+      <h2 class="info-title">DIFFICULTIES I FACED & HOW IT WAS BUILT</h2>
+
+      <p class="info-text">
+        This project uses:
+      </p>
+
+      <ul class="info-list">
+        <li>Amazon S3 for hosting the frontend</li>
+        <li>Amazon CloudFront for global HTTPS delivery</li>
+        <li>Amazon Cognito for user authentication, which guarantees secure access</li>
+        <li>AWS API Gateway (HTTP API) to receive chat messages</li>
+        <li>AWS Lambda to run the serverless backend</li>
+        <li>Gemini Free Tier Model for AI responses</li>
+      </ul>
+
+      <p class="info-text"> 
+        I faced many difficulties, especially with finding AI API which was easy to use and free to start with. 
+        <p class="info-text">
+        I finally settled on Gemini Free Tiar Model, which provides a free tier and a variety of model, it has some limitations
+        , such as a limited number of tokens per request, but for this project it works well.
+        </p>
+        <p class="info-text">    
+        Another challenge was setting up the AWS services to work together, especially Cognito and API Gateway, and the fact
+        that Cognito requires HTTPS, which meant setting up CloudFront in front of S3.
+        </p>
+        <p class="info-text">
+        The frontend was built totally by ChatGPT, I just gave it some instructions and it generated the HTML, CSS and JS code for me.
+        Also I asked ChatGPT to help me with facing some issues I had while creating the overall architecture of the project. 
+        Nonetheless, I had to debug and modify the code myself to make everything work as I wanted, since ChatGPT sometimes generates code that doesn't work as expected.
+        </p>
+        <p class="info-text">
+        Overall, it was a great learning experience and I'm happy with the result! 
+      </p>
+    </p>
+       
+    </section>
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- CHAT SECTION (LOGGED IN) -->
+    <!-- ========================= -->
+    <section id="chatSection" class="chat hidden">
+      <div class="chat-shell">
+        <header class="chat-header">
+          <div>
+            <h2 class="chat-title">Chat</h2>
+            <p class="chat-subtitle">
+              You are now logged in. Start typing below.
+            </p>
+          </div>
+
+          <div class="chat-header-right">
+            <span id="userInfo" class="user-label">Logged in</span>
+            <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+          </div>
+        </header>
+
+        <div id="messages" class="messages"></div>
+
+        <div class="chat-input-row">
+          <input
+            id="input"
+            type="text"
+            class="chat-input"
+            placeholder="Type your message..."
+            autocomplete="off"
+          />
+          <button id="sendBtn" class="btn btn-primary small-btn">
+            Send
+          </button>
+        </div>
+
+        <div id="statusBar" class="status-bar">
+          <span id="statusText">Ready</span>
+          <span id="typingIndicator" class="typing hidden">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span>Built by Marco Tannoia • Serverless AI Chatbot</span>
+    </footer>
+
+  </main>
+</body>
+</html>
