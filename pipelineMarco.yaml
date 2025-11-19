@@ -1,37 +1,28 @@
 version: 0.2
 
-env:
-  variables:
-    S3_BUCKET: "chatbot-frontend-marcp"
-    CLOUDFRONT_DISTRIBUTION_ID: "E1J5LNIBE19ZC7"  # opzionale
-
 phases:
   install:
     commands:
-      - echo "Install phase - controllo versione AWS CLI"
+      - echo "Install phase - controllo AWS CLI"
       - aws --version
-  pre_build:
-    commands:
-      - echo "Pre-build phase - niente da fare qui"
+
   build:
     commands:
-      - echo "Build/Deploy phase - sincronizzo file su S3"
-      # sincronizza SOLO i file del sito, evita roba inutile
-      - aws s3 sync . s3://$S3_BUCKET \
+      - echo "Build/Deploy - sync su S3"
+      - |
+        aws s3 sync . s3://chatbot-frontend-marcp \
           --delete \
           --exclude ".git/*" \
           --exclude ".github/*" \
           --exclude "README.md" \
-          --exclude "pipelineMarco.yaml"
-      - echo "Se CLOUDFRONT_DISTRIBUTION_ID è impostato, faccio invalidazione"
+          --exclude "pipelineMarco.yaml" \
+          --exclude "**/.gitignore"
+
+      - echo "Invalidazione CloudFront"
       - |
-        if [ -n "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
-          aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
-            --paths "/*"
-        else
-          echo "Nessuna invalidazione CloudFront (variabile non impostata)"
-        fi
+        aws cloudfront create-invalidation \
+          --distribution-id E1J5LNIBE19ZC7 \
+          --paths "/*"
 
 artifacts:
   files:
