@@ -8,18 +8,23 @@ const RESPONSE_TYPE  = "token";
 const SCOPE          = "openid+email+phone";
 // ====================================
 
-const hero        = document.getElementById("hero");
-const chatSection = document.getElementById("chatSection");
-const loginBtn    = document.getElementById("loginBtn");
-const logoutBtn   = document.getElementById("logoutBtn");
-const userInfo    = document.getElementById("userInfo");
-const messagesDiv = document.getElementById("messages");
-const inputEl     = document.getElementById("input");
-const sendBtn     = document.getElementById("sendBtn");
-const statusText  = document.getElementById("statusText");
-const typingEl    = document.getElementById("typingIndicator");
-const themeToggle = document.getElementById("themeToggle");
-const heroContent = document.querySelector(".hero-content");
+// Elements
+const navLoginBtn    = document.getElementById("navLoginBtn");
+const navLogoutBtn   = document.getElementById("navLogoutBtn");
+const heroLoginBtn   = document.getElementById("heroLoginBtn");
+const startChatBtn   = document.getElementById("startChatBtn");
+
+const userInfo       = document.getElementById("userInfo");
+const messagesDiv    = document.getElementById("messages");
+const inputEl        = document.getElementById("input");
+const sendBtn        = document.getElementById("sendBtn");
+const statusText     = document.getElementById("statusText");
+const typingEl       = document.getElementById("typingIndicator");
+const themeToggle    = document.getElementById("themeToggle");
+const heroContent    = document.querySelector(".hero-content");
+const topNav         = document.querySelector(".top-nav");
+
+// --- AUTHENTICATION ---
 
 function login() {
   const url =
@@ -36,6 +41,7 @@ function logout() {
   localStorage.removeItem("id_token");
   localStorage.removeItem("access_token");
 
+  // Per logout completo da Cognito
   const url =
     COGNITO_DOMAIN +
     "/logout?client_id=" + encodeURIComponent(CLIENT_ID) +
@@ -44,10 +50,8 @@ function logout() {
   window.location.href = url;
 }
 
-// read tokens from URL fragment after login
 function parseHashTokens() {
   if (!window.location.hash) return;
-
   const hash = window.location.hash.substring(1);
   const params = new URLSearchParams(hash);
 
@@ -57,7 +61,6 @@ function parseHashTokens() {
   if (idToken) localStorage.setItem("id_token", idToken);
   if (accessToken) localStorage.setItem("access_token", accessToken);
 
-  // clean URL
   history.replaceState(null, "", window.location.pathname);
 }
 
@@ -66,16 +69,28 @@ function isLoggedIn() {
 }
 
 function updateUI() {
-  if (isLoggedIn()) {
-    hero.classList.add("hidden");
-    chatSection.classList.remove("hidden");
-    if (userInfo) userInfo.textContent = "Logged in";
+  const userLogged = isLoggedIn();
+
+  // Gestione pulsanti Header
+  if (userLogged) {
+    navLoginBtn.classList.add("hidden");
+    navLogoutBtn.classList.remove("hidden");
+    if (heroLoginBtn) heroLoginBtn.classList.add("hidden");
+    
+    // Mostra info utente
+    if (userInfo) userInfo.textContent = "Logged In (Premium Access)";
   } else {
-    hero.classList.remove("hidden");
-    chatSection.classList.add("hidden");
-    if (userInfo) userInfo.textContent = "";
+    navLoginBtn.classList.remove("hidden");
+    navLogoutBtn.classList.add("hidden");
+    if (heroLoginBtn) heroLoginBtn.classList.remove("hidden");
+    
+    if (userInfo) userInfo.textContent = "Guest Mode";
   }
+  
+  // La Chat Section è sempre visibile sotto, non la nascondiamo più.
 }
+
+// --- CHAT LOGIC ---
 
 function addMessage(text, role) {
   const row = document.createElement("div");
@@ -83,76 +98,115 @@ function addMessage(text, role) {
 
   const bubble = document.createElement("div");
   bubble.className = "bubble " + (role === "user" ? "bubble-user" : "bubble-bot");
-  bubble.textContent = text;
+  
+  // Semplice conversione newlines
+  bubble.innerText = text;
 
   row.appendChild(bubble);
   messagesDiv.appendChild(row);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+  // Scroll automatico
+  requestAnimationFrame(() => {
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
 }
 
 async function sendMessage() {
-  if (!isLoggedIn()) {
-    alert("You need to log in first.");
-    return;
-  }
-
   const text = inputEl.value.trim();
   if (!text) return;
 
+  // 1. Mostra messaggio utente
   addMessage(text, "user");
   inputEl.value = "";
-  statusText.textContent = "Sending message…";
+  
+  // UI Loading
+  statusText.textContent = "AI is thinking...";
   typingEl.classList.remove("hidden");
   sendBtn.disabled = true;
 
   try {
+    // Nota: Se sei Loggato, potresti voler inviare il token nell'header Authorization.
+    // Attualmente il Lambda non lo controlla, quindi inviamo la richiesta semplice.
+    
+    const headers = { "Content-Type": "application/json" };
+    // Se vuoi passare il token al backend in futuro:
+    // if (isLoggedIn()) headers["Authorization"] = "Bearer " + localStorage.getItem("id_token");
+
     const res = await fetch(API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify({ message: text })
     });
 
     if (!res.ok) {
-      console.error("HTTP error:", res.status, res.statusText);
-      addMessage("The server returned an error. Please try again.", "bot");
-      statusText.textContent = "Server error";
+      console.error("HTTP Error", res.status);
+      addMessage("⚠️ Server error or unauthorized. Please try again.", "bot");
+      statusText.textContent = "Error";
       return;
     }
 
     const data = await res.json();
     let answer = data && data.answer ? String(data.answer).trim() : "";
 
-    // Pulizia e fallback
-    if (!answer) {
-      answer = "I could not generate a response.";
-    }
+    if (!answer) answer = "I didn't get a response.";
 
-    // Se dal backend arrivano stringhe di errore grezze di Gemini, le puliamo
+    // Pulizia errori grezzi
     const lower = answer.toLowerCase();
     if (lower.startsWith("gemini http") || lower.includes("gemini generic error")) {
-      answer = "Sorry, the AI backend had a problem. Please try again in a moment.";
+      answer = "My brain is having a temporary glitch. Try again!";
     }
 
     addMessage(answer, "bot");
-    statusText.textContent = "Response received";
+    statusText.textContent = "Online";
   } catch (err) {
     console.error("Fetch error:", err);
-    addMessage("Network error while calling the API.", "bot");
-    statusText.textContent = "Network error";
+    addMessage("Network error. Check your connection.", "bot");
+    statusText.textContent = "Connection Error";
   } finally {
     typingEl.classList.add("hidden");
     sendBtn.disabled = false;
+    inputEl.focus();
   }
 }
 
-// THEME HANDLING
+// --- SCROLL & PARALLAX ---
+
+function setupScrollEffects() {
+  // Nav bar background change
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      topNav.classList.add("scrolled");
+    } else {
+      topNav.classList.remove("scrolled");
+    }
+    
+    // Parallax Hero
+    if (heroContent) {
+      const offset = Math.min(window.scrollY * 0.4, 150);
+      heroContent.style.transform = `translateY(${offset}px)`;
+      heroContent.style.opacity = 1 - Math.min(window.scrollY / 500, 1);
+    }
+  });
+
+  // Reveal animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+}
+
+// --- THEME ---
 
 function applyStoredTheme() {
   const stored = localStorage.getItem("theme");
   if (stored === "light") {
     document.body.classList.add("light-theme");
-  } else {
-    document.body.classList.remove("light-theme");
   }
 }
 
@@ -161,48 +215,26 @@ function toggleTheme() {
   localStorage.setItem("theme", isLight ? "light" : "dark");
 }
 
-// SCROLL REVEAL
-
-function setupScrollReveal() {
-  const elements = document.querySelectorAll(".reveal");
-  if (!("IntersectionObserver" in window)) {
-    elements.forEach(el => el.classList.add("visible"));
-    return;
-  }
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.18 }
-  );
-  elements.forEach(el => observer.observe(el));
-}
-
-// SIMPLE PARALLAX
-
-function setupParallax() {
-  if (!heroContent) return;
-  window.addEventListener("scroll", () => {
-    const y = window.scrollY || window.pageYOffset || 0;
-    const offset = Math.min(y * 0.08, 40);
-    heroContent.style.transform = `translateY(${offset * -1}px)`;
-  });
-}
+// --- INIT ---
 
 document.addEventListener("DOMContentLoaded", () => {
-  // auth
   parseHashTokens();
   applyStoredTheme();
   updateUI();
+  setupScrollEffects();
 
-  // listeners
-  loginBtn.addEventListener("click", login);
-  logoutBtn.addEventListener("click", logout);
+  // Listeners
+  if (navLoginBtn)  navLoginBtn.addEventListener("click", login);
+  if (heroLoginBtn) heroLoginBtn.addEventListener("click", login);
+  if (navLogoutBtn) navLogoutBtn.addEventListener("click", logout);
+  
+  if (startChatBtn) {
+    startChatBtn.addEventListener("click", () => {
+      document.getElementById("chatSection").scrollIntoView({ behavior: "smooth" });
+      inputEl.focus();
+    });
+  }
+
   sendBtn.addEventListener("click", sendMessage);
   inputEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
@@ -211,13 +243,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (themeToggle) {
     themeToggle.addEventListener("click", toggleTheme);
   }
-
-  // small welcome message when logged in
-  if (isLoggedIn()) {
-    addMessage("You are logged in. Ask me anything.", "bot");
-  }
-
-  // UI extras
-  setupScrollReveal();
-  setupParallax();
 });

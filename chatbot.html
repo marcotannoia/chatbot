@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>Marco Tannoia – AI Chatbot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-   <meta name="theme-color" content="#020617" />
-<meta name="color-scheme" content="dark light" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="theme-color" content="#020617" />
+  <meta name="color-scheme" content="dark light" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="chatbot.css" />
   <script defer src="chatbot.js"></script>
 </head>
@@ -13,13 +18,19 @@
 <body>
   <div class="bg-gradient"></div>
 
-  <!-- TOP NAV -->
   <header class="top-nav">
     <div class="nav-left">
-      <span class="nav-dot"></span>
-      <span class="nav-title">Marco’s AI Chatbot</span>
+      <div class="nav-brand">
+        <span class="nav-dot"></span>
+        <span class="nav-title">Marco’s AI</span>
+      </div>
     </div>
     <div class="nav-right">
+      <button id="navLoginBtn" class="btn btn-small btn-ghost hidden">Login</button>
+      <button id="navLogoutBtn" class="btn btn-small btn-ghost hidden">Logout</button>
+      
+      <div class="separator-vertical"></div>
+      
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
         <span class="toggle-icon"></span>
       </button>
@@ -28,165 +39,102 @@
 
   <main class="page">
 
-    <!-- ========================= -->
-    <!-- HERO SECTION (LOGIN PAGE) -->
-    <!-- ========================= -->
     <section id="hero" class="hero-section reveal">
       <div class="hero-content parallax-layer">
-        <h1 class="hero-title">Marco’s Serverless AI Chatbot</h1>
+        <div class="badge-pill">Serverless & AI Powered</div>
+        <h1 class="hero-title"> My Chatbot</h1>
         <p class="hero-subtitle">
-          Elegant. Minimal. Fully Serverless.
+          An elegant, fully serverless chatbot powered by Gemini.
         </p>
 
         <p class="hero-description">
-          Log in with your account and start chatting.
+          Start chatting instantly. No login required.
         </p>
 
-        <button id="loginBtn" class="btn btn-primary hero-btn">
-          LOGIN
-        </button>
-
-        <p class="hero-hint">Login to start using the bot</p>
-      </div>
-
-      <div class="scroll-indicator">
-        <span>Scroll</span>
-        <div class="scroll-dot"></div>
+        <div class="hero-actions">
+          <button id="startChatBtn" class="btn btn-primary hero-btn">
+            Start Chatting
+          </button>
+          <button id="heroLoginBtn" class="btn btn-ghost hero-btn">
+            Login Account
+          </button>
+        </div>
       </div>
     </section>
 
-<div class="main-info-wrapper">
-
-    <!-- ========================= -->
-    <!-- SECTION 2 — ABOUT ME -->
-    <!-- ========================= -->
-
-       <section id="section-about-me" class="info-section reveal">
-      <h2 class="info-title">WHO AM I?</h2>
-      <p class="info-text">
-        I'm Marco Tannoia, an Italian Computer & Automation Engineering student.
-        I like building real projects, experimenting with AI, cloud technologies
-        and automation, and seeing how modern platforms fit together.
-        I have been studying and working with cloud technologies recently and i got really
-        interested. This is my first serverless project.
-        Enjoy it!
-      </p>
-    </section>
-
-        <!-- ========================= -->
-    <!-- SECTION 1 — WHAT IS THIS -->
-    <!-- ========================= -->
-
-
-    <section id="section-what" class="info-section reveal">
-      <h2 class="info-title">WHAT IS THIS PROJECT?</h2>
-      <p class="info-text">
-        This chatbot is my first serverless project. I created it to learn,
-        experiment and understand how a fully scalable cloud application works. How does it work?
-      </p>
-      <p class="info-text">
-        Simply type a message and the bot will respond using AI-generated text.
-      </p>
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- SECTION 2 — ABOUT ME -->
-    <!-- ========================= -->
-
-
-    <!-- ========================= -->
-    <!-- SECTION 3 — HOW IT WAS BUILT -->
-    <!-- ========================= -->
-    <section id="section-how" class="info-section reveal">
-      <h2 class="info-title">DIFFICULTIES I FACED & HOW IT WAS BUILT</h2>
-
-      <p class="info-text">
-        This project uses:
-      </p>
-
-      <ul class="info-list">
-        <li>Amazon S3 for hosting the frontend</li>
-        <li>Amazon CloudFront for global HTTPS delivery</li>
-        <li>Amazon Cognito for user authentication, which guarantees secure access</li>
-        <li>AWS API Gateway (HTTP API) to receive chat messages</li>
-        <li>AWS Lambda to run the serverless backend</li>
-        <li>Gemini Free Tier Model for AI responses</li>
-      </ul>
-
-      <p class="info-text"> 
-        I faced many difficulties, especially with finding AI API which was easy to use and free to start with. 
-        <p class="info-text">
-        I finally settled on Gemini Free Tiar Model, which provides a free tier and a variety of model, it has some limitations
-        , such as a limited number of tokens per request, but for this project it works well.
-        </p>
-        <p class="info-text">    
-        Another challenge was setting up the AWS services to work together, especially Cognito and API Gateway, and the fact
-        that Cognito requires HTTPS, which meant setting up CloudFront in front of S3.
-        </p>
-        <p class="info-text">
-        The frontend was built totally by ChatGPT, I just gave it some instructions and it generated the HTML, CSS and JS code for me.
-        Also I asked ChatGPT to help me with facing some issues I had while creating the overall architecture of the project. 
-        Nonetheless, I had to debug and modify the code myself to make everything work as I wanted, since ChatGPT sometimes generates code that doesn't work as expected.
-        </p>
-        <p class="info-text">
-        Overall, it was a great learning experience and I'm happy with the result! 
-      </p>
-    </p>
-       
-    </section>
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- CHAT SECTION (LOGGED IN) -->
-    <!-- ========================= -->
-    <section id="chatSection" class="chat hidden">
+    <section id="chatSection" class="chat">
       <div class="chat-shell">
         <header class="chat-header">
-          <div>
-            <h2 class="chat-title">Chat</h2>
-            <p class="chat-subtitle">
-              You are now logged in. Start typing below.
-            </p>
-          </div>
-
-          <div class="chat-header-right">
-            <span id="userInfo" class="user-label">Logged in</span>
-            <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+          <div class="chat-header-info">
+            <h2 class="chat-title">Assistant</h2>
+            <div class="status-indicator">
+              <span class="status-dot online"></span>
+              <span id="userInfo" class="chat-subtitle">Guest Mode</span>
+            </div>
           </div>
         </header>
 
-        <div id="messages" class="messages"></div>
-
-        <div class="chat-input-row">
-          <input
-            id="input"
-            type="text"
-            class="chat-input"
-            placeholder="Type your message..."
-            autocomplete="off"
-          />
-          <button id="sendBtn" class="btn btn-primary small-btn">
-            Send
-          </button>
+        <div id="messages" class="messages">
+          <div class="msg-row bot">
+            <div class="bubble bubble-bot">
+              Hello! I am Marco's AI Assistant. How can I help you today?
+            </div>
+          </div>
         </div>
 
-        <div id="statusBar" class="status-bar">
-          <span id="statusText">Ready</span>
-          <span id="typingIndicator" class="typing hidden">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </span>
+        <div class="chat-input-area">
+          <div class="chat-input-wrapper">
+            <input
+              id="input"
+              type="text"
+              class="chat-input"
+              placeholder="Ask me anything..."
+              autocomplete="off"
+            />
+            <button id="sendBtn" class="btn-send" aria-label="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+          
+          <div id="statusBar" class="status-bar">
+            <span id="statusText"></span>
+            <span id="typingIndicator" class="typing hidden">
+              <span>AI is thinking</span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </span>
+          </div>
         </div>
       </div>
     </section>
 
+    <div class="main-info-wrapper reveal">
+       <section id="section-about" class="info-section">
+          <h2 class="info-title">About the Project</h2>
+          <p class="info-text">
+            I'm <strong>Marco Tannoia</strong>, a Computer & Automation Engineering student. 
+            This is a serverless project leveraging AWS Lambda, API Gateway, and Google Gemini.
+          </p>
+          <ul class="info-list">
+            <li>Frontend hosted on S3 </li>
+            <li>Auth via Cognito (Optional)</li>
+            <li>AI Logic via AWS Lambda (Python)</li>
+          </ul>
+       </section>
+       <section id="section-contact" class="info-section">
+          <h2 class="info-title">More info!</h2>
+          <p class="info-text">
+            I am going to be brutally honest here, the frontend code is not mine, it has been completely genereted by AI, I am not able to do it  by myself.
+            Furthermore, the backend code is written in javascript, since I was trying to learn a language. At the end, I am totally proud of what I have done so far.
+            
 
-    <!-- FOOTER -->
+            This is My Chatbot, I hope you like it!
+          </p>
+    </div>  
+
     <footer class="footer">
-      <span>Built by Marco Tannoia • Serverless AI Chatbot</span>
+      <span>&copy; Marco Tannoia • Serverless AI Chatbot</span>
     </footer>
 
   </main>
