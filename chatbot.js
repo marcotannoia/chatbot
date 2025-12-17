@@ -86,12 +86,13 @@ function updateUI() {
     
     if (userInfo) userInfo.textContent = "Guest Mode";
   }
-  
-  // La Chat Section è sempre visibile sotto, non la nascondiamo più.
 }
 
 // --- CHAT LOGIC ---
 
+/**
+ * Funzione aggiornata per supportare il Markdown
+ */
 function addMessage(text, role) {
   const row = document.createElement("div");
   row.className = "msg-row " + (role === "user" ? "user" : "bot");
@@ -99,13 +100,19 @@ function addMessage(text, role) {
   const bubble = document.createElement("div");
   bubble.className = "bubble " + (role === "user" ? "bubble-user" : "bubble-bot");
   
-  // Semplice conversione newlines
-  bubble.innerText = text;
+  if (role === "bot") {
+    // Utilizziamo marked.parse per convertire il Markdown in HTML
+    // Questo permette di visualizzare grassetto (**), liste (*) e codice
+    bubble.innerHTML = marked.parse(text);
+  } else {
+    // Per i messaggi dell'utente manteniamo innerText per sicurezza (prevenzione XSS)
+    bubble.innerText = text;
+  }
 
   row.appendChild(bubble);
   messagesDiv.appendChild(row);
   
-  // Scroll automatico
+  // Scroll automatico verso il basso
   requestAnimationFrame(() => {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
@@ -125,12 +132,7 @@ async function sendMessage() {
   sendBtn.disabled = true;
 
   try {
-    // Nota: Se sei Loggato, potresti voler inviare il token nell'header Authorization.
-    // Attualmente il Lambda non lo controlla, quindi inviamo la richiesta semplice.
-    
     const headers = { "Content-Type": "application/json" };
-    // Se vuoi passare il token al backend in futuro:
-    // if (isLoggedIn()) headers["Authorization"] = "Bearer " + localStorage.getItem("id_token");
 
     const res = await fetch(API_URL, {
       method: "POST",
@@ -172,7 +174,6 @@ async function sendMessage() {
 // --- SCROLL & PARALLAX ---
 
 function setupScrollEffects() {
-  // Nav bar background change
   window.addEventListener("scroll", () => {
     if (window.scrollY > 50) {
       topNav.classList.add("scrolled");
@@ -180,7 +181,6 @@ function setupScrollEffects() {
       topNav.classList.remove("scrolled");
     }
     
-    // Parallax Hero
     if (heroContent) {
       const offset = Math.min(window.scrollY * 0.4, 150);
       heroContent.style.transform = `translateY(${offset}px)`;
@@ -188,7 +188,6 @@ function setupScrollEffects() {
     }
   });
 
-  // Reveal animations
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -223,7 +222,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUI();
   setupScrollEffects();
 
-  // Listeners
   if (navLoginBtn)  navLoginBtn.addEventListener("click", login);
   if (heroLoginBtn) heroLoginBtn.addEventListener("click", login);
   if (navLogoutBtn) navLogoutBtn.addEventListener("click", logout);
