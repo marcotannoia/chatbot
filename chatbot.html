@@ -1,147 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Marco Tannoia – AI Chatbot</title>
+  <title>OCRAM – AI Chatbot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="theme-color" content="#020617" />
-  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#ffffff" />
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="chatbot.css" />
   <script defer src="chatbot.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<link rel="stylesheet" href="chatbot.css" />
-<script defer src="chatbot.js"></script>
 </head>
 
-<body>
-  <div class="bg-gradient"></div>
+<body class="light-theme">
+  <div class="bg-minimal"></div>
 
   <header class="top-nav">
-    <div class="nav-left">
-      <div class="nav-brand">
-        <span class="nav-dot"></span>
-        <span class="nav-title">Marco’s AI</span>
+    <div class="nav-container">
+      <div class="nav-left">
+        <div class="brand">OCRAM<span class="dot">.</span></div>
       </div>
-    </div>
-    <div class="nav-right">
-      <button id="navLoginBtn" class="btn btn-small btn-ghost hidden">Login</button>
-      <button id="navLogoutBtn" class="btn btn-small btn-ghost hidden">Logout</button>
-      
-      <div class="separator-vertical"></div>
-      
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <span class="toggle-icon"></span>
-      </button>
+      <div class="nav-right">
+        <button id="navLoginBtn" class="btn-nav-ghost hidden">Login</button>
+        <button id="navLogoutBtn" class="btn-nav-ghost hidden">Logout</button>
+        <div class="separator"></div>
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambia tema">
+          <span class="toggle-icon"></span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="page">
-
-    <section id="hero" class="hero-section reveal">
-      <div class="hero-content parallax-layer">
-        <div class="badge-pill">AWS Project </div>
-        <h1 class="hero-title"> My Chatbot</h1>
-        <p class="hero-subtitle">
-          elegant, fully serverless chatbot powered by Gemini API
-        </p>
-
-        <p class="hero-description">
-          Start chatting instantly. No login required.
-        </p>
-
+  <main>
+    <section id="hero" class="hero-section">
+      <div class="hero-content reveal">
+        <p class="hero-pretitle">simply</p>
+        <h1 class="hero-title">OCRAM.</h1>
+        <p class="hero-subtitle">Elegant serverless AI powered by Gemini API</p>
+        
         <div class="hero-actions">
-          <button id="startChatBtn" class="btn btn-primary hero-btn">
-            Try it
-          </button>
-          <button id="heroLoginBtn" class="btn btn-ghost hero-btn">
-            Login 
-          </button>
+          <button id="startChatBtn" class="btn-hero-primary">Try it now</button>
+          <button id="heroLoginBtn" class="btn-hero-secondary"> Sign in</button>
         </div>
+      </div>
+      <div class="scroll-hint">
+        <span>Scroll to discover</span>
+        <div class="arrow">↓</div>
       </div>
     </section>
 
-    <section id="chatSection" class="chat">
+    <section id="chatSection" class="chat-section">
       <div class="chat-shell">
         <header class="chat-header">
-          <div class="chat-header-info">
-            <h2 class="chat-title">Marco's</h2>
+          <div class="chat-header-left">
             <div class="status-indicator">
-              <span class="status-dot online"></span>
-              <span id="userInfo" class="chat-subtitle">Guest Mode</span>
+              <span class="status-dot"></span>
+              <span id="userInfo">Guest Mode</span>
             </div>
+          </div>
+          <div class="chat-header-right">
+            <span class="badge-aws">AWS Serverless</span>
           </div>
         </header>
 
-        <div id="messages" class="messages">
+        <div id="messages" class="messages-area">
           <div class="msg-row bot">
             <div class="bubble bubble-bot">
-              Hello! I am Marco's AI Assistant. How can I help you today?
+              Hello! I'm <strong>Ocram</strong>. How can I assist you today?
             </div>
           </div>
         </div>
 
-        <div class="chat-input-area">
-          <div class="chat-input-wrapper">
+        <div class="chat-input-container">
+          <div class="input-wrapper">
             <input
               id="input"
               type="text"
-              class="chat-input"
-              placeholder="Ask me anything..."
+              placeholder="Chiedi qualcosa a Ocram..."
               autocomplete="off"
             />
-            <button id="sendBtn" class="btn-send" aria-label="Send message">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <button id="sendBtn" class="btn-send" aria-label="Invia">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
           </div>
           
           <div id="statusBar" class="status-bar">
-            <span id="statusText"></span>
+            <span id="statusText">Online</span>
             <span id="typingIndicator" class="typing hidden">
-              <span>AI is thinking</span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
+              <span>OCRAM is thinking</span>
+              <span class="dot-anim"></span><span class="dot-anim"></span><span class="dot-anim"></span>
             </span>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="main-info-wrapper reveal">
-       <section id="section-about" class="info-section">
-          <h2 class="info-title">About the Project</h2>
-          <p class="info-text">
-            I'm <strong>Marco Tannoia</strong>, a Computer & Automation Engineering student. 
-            This is a serverless project leveraging AWS Lambda, API Gateway, and Google Gemini.
-          </p>
-          <ul class="info-list">
-            <li>Frontend hosted on S3 </li>
-            <li>Auth via Cognito (Optional)</li>
-            <li>AI Logic via AWS Lambda (Python)</li>
-          </ul>
-       </section>
-       <section id="section-contact" class="info-section">
-          <h2 class="info-title">More info!</h2>
-          <p class="info-text">
-            This is my first project involving AI and serverless architecture,for the first time
-            I decided to use AWS services to build an usefull application, despite being my first projetct, I 
-            wanted to involve many others services to learn as much as possible, such as Google API, Protocols and more.
-            I want to be honest, the project is not perfect, there are many things to improve, such as the frontend code, which has not been written by me. mainly because this is not
-            where i wanted to focus, but I will improve it in the future.
-
-            This is My Chatbot, I hope you like it!
-          </p>
-    </div>  
-
-    <footer class="footer">
-      <span>&copy; Marco Tannoia • Serverless AI Chatbot</span>
+    <footer class="info-footer">
+      <div class="footer-container reveal">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4 class="footer-title">Architecture</h4>
+            <p>Developed on AWS Serverless Architecture using Lambda, API Gateway, S3, and Cognito for authentication.</p>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-title">Developer</h4>
+            <p><strong>Marco Tannoia</strong><br>First project of the Simply journey</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 OCRAM Project • Bari, Italy • Cloud Computing Passion</p>
+        </div>
+      </div>
     </footer>
-
   </main>
 </body>
 </html>
