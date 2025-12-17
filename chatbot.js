@@ -81,8 +81,9 @@ async function sendMessage() {
   addMessage(text, "user");
   inputEl.value = "";
   
-  statusText.textContent = "OCRAM is thinking...";
-  typingEl.classList.remove("hidden");
+  // Aggiungi il punto di domanda ?. per evitare errori se l'elemento non esiste
+  if (statusText) statusText.textContent = "OCRAM is thinking...";
+  typingEl?.classList.remove("hidden");
   sendBtn.disabled = true;
 
   try {
@@ -95,11 +96,12 @@ async function sendMessage() {
     const data = await res.json();
     let answer = data?.answer?.trim() || "I didn't get a response.";
     addMessage(answer, "bot");
-    statusText.textContent = "Online";
+    
+    if (statusText) statusText.textContent = "Online";
   } catch (err) {
     addMessage("Connection error. Check your AWS setup.", "bot");
   } finally {
-    typingEl.classList.add("hidden");
+    typingEl?.classList.add("hidden");
     sendBtn.disabled = false;
     inputEl.focus();
   }

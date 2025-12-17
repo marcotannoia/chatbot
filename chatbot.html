@@ -39,7 +39,7 @@
       <div class="hero-content reveal">
         <p class="hero-pretitle">simply</p>
         <h1 class="hero-title">OCRAM.</h1>
-        <p class="hero-subtitle">Elegant serverless AI powered by Gemini API</p>
+        <p class="hero-subtitle"></p>
         
         <div class="hero-actions">
           <button id="startChatBtn" class="btn-hero-primary">Try it now</button>
@@ -61,9 +61,6 @@
               <span id="userInfo">Guest Mode</span>
             </div>
           </div>
-          <div class="chat-header-right">
-            <span class="badge-aws">AWS Serverless</span>
-          </div>
         </header>
 
         <div id="messages" class="messages-area">
@@ -79,21 +76,14 @@
             <input
               id="input"
               type="text"
-              placeholder="Chiedi qualcosa a Ocram..."
+              placeholder="Ask something to Ocram..."
               autocomplete="off"
             />
             <button id="sendBtn" class="btn-send" aria-label="Invia">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
           </div>
-          
-          <div id="statusBar" class="status-bar">
-            <span id="statusText">Online</span>
-            <span id="typingIndicator" class="typing hidden">
-              <span>OCRAM is thinking</span>
-              <span class="dot-anim"></span><span class="dot-anim"></span><span class="dot-anim"></span>
-            </span>
-          </div>
+        
         </div>
       </div>
     </section>

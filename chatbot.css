@@ -162,3 +162,57 @@ body {
 .theme-toggle { width: 44px; height: 24px; background: var(--border); border-radius: 20px; border: none; cursor: pointer; position: relative; }
 .toggle-icon { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; left: 3px; top: 3px; transition: 0.3s; }
 body:not(.light-theme) .toggle-icon { left: 23px; background: var(--primary); }
+
+/* --- OTTIMIZZAZIONI MOBILE --- */
+@media (max-width: 768px) {
+  /* Hero Section: riduciamo il titolo "OCRAM" */
+  .hero-title {
+    font-size: clamp(3rem, 12vw, 5rem); /* Più piccolo rispetto all'originale */
+    letter-spacing: -2px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    padding: 0 20px;
+    margin-bottom: 30px;
+  }
+
+  /* Azioni Hero: pulsanti più flessibili */
+  .hero-actions {
+    flex-direction: column; /* Impilati verticalmente per risparmiare larghezza */
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 80%; /* Non più fissi a 200px */
+    padding: 14px 0;
+  }
+
+  /* --- CHAT SECTION --- */
+  .chat-shell {
+    height: 85vh; /* Più spazio alla chat su mobile */
+    border-radius: 20px; /* Angoli meno pronunciati */
+  }
+
+  .messages-area {
+    padding: 16px; /* Ridotto da 32px */
+    gap: 12px;    /* Messaggi più vicini tra loro */
+  }
+
+  /* Bolle messaggi più piccole e sottili */
+  .bubble {
+    max-width: 90%;
+    padding: 10px 16px; /* Ridotto il padding interno */
+    font-size: 0.9rem;   /* Testo più piccolo come richiesto */
+    border-radius: 18px;
+  }
+
+  .chat-input-container {
+    padding: 16px; /* Meno spazio vuoto intorno all'input */
+  }
+
+  .input-wrapper {
+    padding: 4px 4px 4px 16px;
+  }
+}
